@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: project
+    ports:
+    - '3000:3000'
+    volumes:
+    - .:/app
+    - /app/node_modules
+
+  adminer:
+    container_name: adminer
+    image: adminer:latest
+    depends_on:
+      - database
+    ports:
+      - 8001:8080
+    volumes:
+      - ./dev/adminer/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+
+  database:
+    container_name: postgres
+    image: postgres:14.2-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - .:/app/backend
+
