@@ -1,8 +1,8 @@
 # <p align="center">Rescue Quiz project </p>
-### Migration from React/ViteJS to NextJS13/Typescript/Docker 
+### Migration from Frontend to Backend
   
 This project is a first aid quiz interface, to learn first aid procedures.
-#### I took my original project to migrate to NextJS & Typescript; & use Docker and Vitest >> to learn theses technologies. 
+#### I took my original project (React/Firebase) to migrate to NextJS & Typescript; add backend with NestJS, Mikro-ORM and PostgreSQL >> to learn theses technologies. 
 
 
 ## 🛠️ Tech Stack
