@@ -1,4 +1,3 @@
-
 # <p align="center">Rescue Quiz project </p>
 ### Migration from React/ViteJS to NextJS13/Typescript/Docker 
   
