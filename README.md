@@ -13,6 +13,9 @@ This project is a first aid quiz interface, to learn first aid procedures.
 - [Firebase](https://firebase.google.com/)
 - [Docker](https://www.docker.com/)
 - [Vitest](https://vitest.dev/)
+- [NestJS](https://docs.nestjs.com/)
+- [MikroOrm](https://mikro-orm.io/)
+- [PostgreSQL](https://www.postgresql.org/)
         
 
 ## 🛠️ Install Dependencies    
@@ -23,7 +26,7 @@ yarn add
 
 ## 🧑🏻‍💻 Run the project
 ```bash
-yarn dev or docker-compose up --build
+docker-compose up 
 
 ```
 
