@@ -6,9 +6,9 @@ import {
   TextType,
   Type,
 } from '@mikro-orm/postgresql';
-import UserEntity from './User.entity';
+import UserEntity from './users/User.entity';
 import { Migrator, TSMigrationGenerator } from '@mikro-orm/migrations';
-import ScoreEntity from './Score.entity';
+import ScoreEntity from './scores/Score.entity';
 
 const config: Options = {
   driver: PostgreSqlDriver,

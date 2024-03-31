@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersService } from './users/users.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import config from './mikro-orm.config';
@@ -11,7 +10,6 @@ import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { ScoresModule } from './scores/scores.module';
 import { ScoresController } from './scores/scores.controller';
-import { ScoresService } from './scores/scores.service';
 
 @Module({
   imports: [
@@ -26,6 +24,6 @@ import { ScoresService } from './scores/scores.service';
     AuthController,
     ScoresController,
   ],
-  providers: [AppService, UsersService, AuthService, ScoresService],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}

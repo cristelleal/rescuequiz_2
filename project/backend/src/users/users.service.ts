@@ -1,25 +1,36 @@
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
+import UserEntity from './User.entity';
 
 export type User = any;
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      email: 'example@gmail',
-      password: 'example001',
-    },
-    {
-      userId: 2,
-      username: 'david',
-      email: 'example2@gmail',
-      password: 'example002',
-    },
-  ];
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: EntityRepository<UserEntity>,
+    private readonly em: EntityManager,
+  ) {}
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  async findOne(filter: Partial<UserEntity>): Promise<UserEntity | undefined> {
+    return await this.userRepository.findOne(filter);
+  }
+
+  async findAll(): Promise<UserEntity[]> {
+    return await this.userRepository.findAll();
+  }
+
+  async createUser(
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<UserEntity> {
+    const user = new UserEntity();
+    user.name = name;
+    user.email = email;
+    user.password = password;
+    await this.em.persistAndFlush(user);
+    return user;
   }
 }

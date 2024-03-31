@@ -5,7 +5,7 @@ import {
   OneToMany,
   Collection,
 } from '@mikro-orm/core';
-import ScoreEntity from './Score.entity';
+import ScoreEntity from '../scores/Score.entity';
 
 @Entity({ tableName: 'users' })
 export default class UserEntity {
@@ -23,4 +23,5 @@ export default class UserEntity {
 
   @OneToMany(() => ScoreEntity, 'user')
   scores = new Collection<ScoreEntity>(this);
+  value: string;
 }

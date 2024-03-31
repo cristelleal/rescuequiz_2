@@ -1,5 +1,6 @@
-import { Entity, PrimaryKey, Property, ManyToOne } from '@mikro-orm/core';
-import UserEntity from './User.entity';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import UserEntity from '../users/User.entity';
+
 @Entity({ tableName: 'scores' })
 export default class ScoreEntity {
   @PrimaryKey()
@@ -13,4 +14,5 @@ export default class ScoreEntity {
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;
+  value: number;
 }
