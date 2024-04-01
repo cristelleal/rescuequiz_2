@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import UserEntity from './User.entity';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
@@ -18,9 +8,8 @@ export class UsersController {
 
   @Get()
   @UseGuards(LocalAuthGuard)
-  async getUsers(@Req() req: Request, @Res() res: Response) {
-    const users = await this.usersService.findAll();
-    res.json(users);
+  async getUsers(): Promise<UserEntity[]> {
+    return await this.usersService.findAll();
   }
 
   @Get(':id')
@@ -34,9 +23,7 @@ export class UsersController {
     @Body('name') name: string,
     @Body('email') email: string,
     @Body('password') password: string,
-    @Res() res: Response,
-  ) {
-    const user = await this.usersService.createUser(name, email, password);
-    res.status(201).json(user);
+  ): Promise<UserEntity> {
+    return await this.usersService.createUser(name, email, password);
   }
 }
