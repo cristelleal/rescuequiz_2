@@ -9,22 +9,22 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import UserEntity from './User.entity';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseGuards(AuthGuard())
+  @UseGuards(LocalAuthGuard)
   async getUsers(@Req() req: Request, @Res() res: Response) {
     const users = await this.usersService.findAll();
     res.json(users);
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard())
+  @UseGuards(LocalAuthGuard)
   async findOne(@Param('id') id: number): Promise<UserEntity> {
     return await this.usersService.findOne({ id });
   }
