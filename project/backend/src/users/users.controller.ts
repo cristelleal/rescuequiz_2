@@ -2,12 +2,15 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import UserEntity from './User.entity';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
+import SignUpDto from './SingUp.dto';
+
 @Controller('users')
 export class UsersController {
+  authService: any;
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   async getUsers(): Promise<UserEntity[]> {
     return await this.usersService.findAll();
   }
@@ -19,11 +22,15 @@ export class UsersController {
   }
 
   @Post()
-  async createUser(
-    @Body('name') name: string,
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ): Promise<UserEntity> {
-    return await this.usersService.createUser(name, email, password);
+  async createUser(@Body() SignUpDto: SignUpDto): Promise<UserEntity> {
+    const user = await this.usersService.createUser(
+      SignUpDto.name,
+      SignUpDto.email,
+      SignUpDto.password,
+    );
+    if (!user) {
+      throw new Error('Error : Account not created');
+    }
+    return user;
   }
 }

@@ -21,13 +21,13 @@ export class AuthController {
   @Post('login')
   async signIn(@Body() signInDto: SignInDto) {
     const user = await this.authService.validateUser(
-      signInDto.username,
+      signInDto.name,
       signInDto.password,
     );
     if (!user) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, username: user.name };
+    const payload = { sub: user.id, name: user.name };
     const accessToken = await this.jwtService.signAsync(payload);
     return { access_token: accessToken };
   }

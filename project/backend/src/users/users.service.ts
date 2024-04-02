@@ -2,8 +2,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { EntityManager, EntityRepository } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 import UserEntity from './User.entity';
-
-export type User = any;
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -14,11 +13,11 @@ export class UsersService {
   ) {}
 
   async findOne(filter: Partial<UserEntity>): Promise<UserEntity | undefined> {
-    return await this.userRepository.findOne(filter);
+    return this.userRepository.findOne(filter);
   }
 
   async findAll(): Promise<UserEntity[]> {
-    return await this.userRepository.findAll();
+    return this.userRepository.findAll();
   }
 
   async createUser(
@@ -26,10 +25,11 @@ export class UsersService {
     email: string,
     password: string,
   ): Promise<UserEntity> {
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = new UserEntity();
     user.name = name;
     user.email = email;
-    user.password = password;
+    user.password = hashedPassword;
     await this.em.persistAndFlush(user);
     return user;
   }
