@@ -12,7 +12,7 @@ export class UsersService {
     private readonly em: EntityManager,
   ) {}
 
-  async findOne(filter: Partial<UserEntity>): Promise<UserEntity | undefined> {
+  async findOne(filter: Partial<UserEntity>): Promise<UserEntity | null> {
     return this.userRepository.findOne(filter);
   }
 

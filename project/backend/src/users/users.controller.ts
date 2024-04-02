@@ -17,8 +17,8 @@ export class UsersController {
 
   @Get(':id')
   @UseGuards(LocalAuthGuard)
-  async findOne(@Param('id') id: number): Promise<UserEntity> {
-    return await this.usersService.findOne({ id });
+  async findOne(@Param('id') id: number): Promise<UserEntity | null> {
+    return this.usersService.findOne({ id });
   }
 
   @Post()
