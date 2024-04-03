@@ -9,6 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { SignInDto } from './signIn.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -18,6 +19,7 @@ export class AuthController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ operationId: 'getAuth' })
   @Post('login')
   async signIn(@Body() signInDto: SignInDto) {
     const user = await this.authService.validateUser(
