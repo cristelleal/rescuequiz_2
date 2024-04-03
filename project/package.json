@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "get-types": "ts-node ./api/api-rest-schema-gen.ts"
   },
   "dependencies": {
     "@nestjs/apollo": "^12.0.7",
@@ -22,15 +23,19 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.2",
     "@typescript-eslint/typescript-estree": "^7.3.1",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
     "firebase": "^10.9.0",
     "next": "13.5.6",
     "react": "^18",
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18",
-    "react-firebase-hooks": "^5.1.1"
+    "react-firebase-hooks": "^5.1.1",
+    "swagger-typescript-api": "^13.0.3",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.12.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
