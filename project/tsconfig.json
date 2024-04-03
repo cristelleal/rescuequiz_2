@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2021",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -15,8 +19,15 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -25,9 +36,13 @@
     "types/react-i18next.d.ts",
     "custom.d.ts",
     "codegen.ts",
-    "api-graphql-schema-gen.ts"
+    "api-graphql-schema-gen.ts",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "cypress"],
+  "exclude": [
+    "node_modules",
+    "cypress"
+  ],
   "ts-node": {
     "esm": true,
     "compilerOptions": {
