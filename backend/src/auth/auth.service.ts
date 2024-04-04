@@ -10,8 +10,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(name: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne({ name: name });
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.usersService.findOne({ email: email });
     if (!user) {
       return null;
     }
@@ -23,8 +23,8 @@ export class AuthService {
     return user;
   }
 
-  async signIn(name: string, pass: string): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOne({ name: name });
+  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
+    const user = await this.usersService.findOne({ email: email });
     if (!user || !(await bcrypt.compare(pass, user.password))) {
       throw new Error('LogIn error');
     }

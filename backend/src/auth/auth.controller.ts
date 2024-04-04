@@ -23,7 +23,7 @@ export class AuthController {
   @Post('login')
   async signIn(@Body() signInDto: SignInDto) {
     const user = await this.authService.validateUser(
-      signInDto.name,
+      signInDto.email,
       signInDto.password,
     );
     if (!user) {
