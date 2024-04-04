@@ -7,9 +7,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDto } from './signIn.dto';
+import { SignInDto } from './dto/signIn.dto';
 import { JwtService } from '@nestjs/jwt';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { ResponseSignInDto } from './dto/responseSignIn.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -20,8 +21,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ operationId: 'getAuth' })
+  @ApiOkResponse({ type: ResponseSignInDto })
   @Post('login')
-  async signIn(@Body() signInDto: SignInDto) {
+  async signIn(@Body() signInDto: SignInDto): Promise<ResponseSignInDto> {
     const user = await this.authService.validateUser(
       signInDto.email,
       signInDto.password,

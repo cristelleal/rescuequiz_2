@@ -29,6 +29,6 @@ export type quizzType = {
     option3: string;
     answer: number;
     advice: string;
-  }[];
+  }[]; 
   title: string;
 };

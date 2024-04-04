@@ -1,20 +1,15 @@
-import { useRef, useState, useEffect } from 'react';
-import Link from 'next/link'; 
-import { db, auth } from '../../../firebase/firebase.config';
-import {
-  getAuth,
-  setPersistence,
-  browserSessionPersistence,
-} from 'firebase/auth';
-import { increment, doc, setDoc, arrayUnion } from 'firebase/firestore';
+'use client';
+import { useRef, useState } from 'react';
+import Link from 'next/link';
 import FooterElement from '../footerElement/FooterElement';
 import Button from '../button/Button';
-import AuthChecker from '../authChecker/authChecker';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './quizz.css';
 import Navigation from '../navigation/Navigation';
-import { quizzType } from '@/app/types';
+import { useQuery } from 'react-query';
+import api from '@/client';
+import { quizzType } from '../../types';
 
 function Quizz({ quizzData, title }: quizzType) {
   let [index, setIndex] = useState(0);
@@ -29,6 +24,15 @@ function Quizz({ quizzData, title }: quizzType) {
   let option3 = useRef<HTMLLIElement>(null);
 
   const optionArray = [option1, option2, option3];
+
+  const getScoresData = async () => {
+    api.scores.getScoresCount();
+  };
+
+  const { data, error } = useQuery('scores', getScoresData);
+  if (error) {
+    console.log('Error:', error);
+  }
 
   const checkAnswer = (element: any, answer: number) => {
     if (lock === false) {
@@ -49,20 +53,9 @@ function Quizz({ quizzData, title }: quizzType) {
     if (lock) {
       if (index === quizzData.length - 1) {
         setResult(true);
-        if (auth.currentUser) {
-          const userRef = doc(db, 'users', auth.currentUser.uid);
-          try {
-            await setDoc(
-              userRef,
-              {
-                quizzCount: increment(1),
-                quizzScores: arrayUnion(percentage),
-              },
-              { merge: true }
-            );
-          } catch (error: any) {
-            throw new Error('Error updating quizzCount:', error);
-          }
+        try {
+        } catch (error: any) {
+          throw new Error('Error updating quizzCount:', error);
         }
         return 0;
       }
@@ -91,23 +84,9 @@ function Quizz({ quizzData, title }: quizzType) {
   const percentage = calculateSuccessPercentage();
   const isScoreAboveHalf = calculateSuccessPercentage() > 50;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const authInstance = getAuth();
-        await setPersistence(authInstance, browserSessionPersistence);
-      } catch (error: any) {
-        throw new Error('Error :', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
     <div className='min-h-screen flex flex-col justify-start'>
-      <AuthChecker>
-      <Navigation />
+        <Navigation />
         <div className='p-2'></div>
         <main className='main-section'>
           <div className='container'>
@@ -153,9 +132,7 @@ function Quizz({ quizzData, title }: quizzType) {
                 </div>
                 {showAdvice && (
                   <div className='bg-red-50 p-4 rounded text-gray-700 text-sm'>
-                    <p>
-                      💡 {question.advice}
-                    </p>
+                    <p>💡 {question.advice}</p>
                   </div>
                 )}
                 <div className='index'>
@@ -217,7 +194,6 @@ function Quizz({ quizzData, title }: quizzType) {
           </div>
         </main>
         <FooterElement />
-      </AuthChecker>
     </div>
   );
 }

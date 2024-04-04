@@ -1,34 +1,24 @@
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../../firebase/firebase.config';
-import { signOut, getAuth } from 'firebase/auth';
+"use client"
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useQueryClient } from 'react-query';
 
 function Navigation() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const handleSignOut = async () => {
     try {
-      getAuth();
-      await signOut(auth);
+      queryClient.clear();
       router.push('/');
-      localStorage.removeItem('name');
     } catch (error: any) {
       throw new Error('Logout error:', error);
     }
   };
-  const [user, loading] = useAuthState(auth);
 
   const handleClick = () => {
-    if (user) {
-      router.push('/userAccount');
-    } else {
-      router.push('/');
-    }
+    router.push('/userAccount');
   };
-
-  if (loading) {
-    return null;
-  }
 
   return (
     <nav

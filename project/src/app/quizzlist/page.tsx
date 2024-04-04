@@ -1,13 +1,11 @@
 'use client'
 import FooterElement from '../components/footerElement/FooterElement';
-import AuthChecker from '../components/authChecker/authChecker';
 import Link from 'next/link';
 import Navigation from '../components/navigation/Navigation';
 
 function QuizzList(): JSX.Element {
   return (
     <div className='min-h-screen flex flex-col justify-start'>
-      <AuthChecker>
         <Navigation />
         <section className='bg-white/95 mt-4 mb-12 mx-2 sm:mx-12 shadow-sm border border-gray-100 rounded'>
           <div className='max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16'>
@@ -176,7 +174,6 @@ function QuizzList(): JSX.Element {
           </div>
         </section>
         <FooterElement />
-      </AuthChecker>
     </div>
   );
 }

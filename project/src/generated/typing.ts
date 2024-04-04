@@ -9,6 +9,10 @@
  * ---------------------------------------------------------------
  */
 
+export interface ResponseSignInDto {
+  access_token: string;
+}
+
 export interface ScoreDto {
   /**
    * The score of the user
@@ -20,9 +24,9 @@ export interface ScoreDto {
 export interface SignInDto {
   /**
    * The name of the user
-   * @example "john_doe"
+   * @example "john_doe@gmail.com"
    */
-  name: string;
+  email: string;
   /**
    * The password of the user
    * @example "password123"
@@ -252,14 +256,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @name GetAuth
      * @request POST:/auth/login
-     * @response `200` `void`
+     * @response `200` `ResponseSignInDto`
      */
     getAuth: (data: SignInDto, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<ResponseSignInDto, any>({
         path: `/auth/login`,
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
         ...params,
       }),
   };

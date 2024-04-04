@@ -13,7 +13,7 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ operationId: 'getUsers' })
-  // @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard)
   async getUsers(): Promise<UserEntity[]> {
     return this.usersService.findAll();
   }

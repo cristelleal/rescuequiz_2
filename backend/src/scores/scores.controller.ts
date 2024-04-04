@@ -4,17 +4,21 @@ import ScoreEntity from './Score.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ScoreDto } from './score.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { LocalAuthGuard } from '@/auth/local-auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('scores')
 export class ScoresController {
   constructor(private readonly scoresService: ScoresService) {}
 
+  @UseGuards(LocalAuthGuard)
   @ApiOperation({ operationId: 'getScoresCount' })
   @Get('count')
   async getScoresCount(): Promise<number> {
     return this.scoresService.scoreCount();
   }
 
+  @UseGuards(LocalAuthGuard)
   @ApiOperation({ operationId: 'getTotalScores' })
   @Get('total')
   async getTotalScores(): Promise<number | ScoreEntity[]> {
