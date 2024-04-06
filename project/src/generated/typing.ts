@@ -18,7 +18,7 @@ export interface ScoreDto {
    * The score of the user
    * @example 50
    */
-  score: number;
+  totalScore: number;
 }
 
 export interface SignInDto {

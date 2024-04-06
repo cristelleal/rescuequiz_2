@@ -1,31 +1,37 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMutation } from 'react-query';
-import { useRouter } from 'next/navigation';
 import { validateEmail, validatePassword } from '../utils/utils';
 import Form from '../components/form/Form';
-import api from '@/client';
+import { signIn, useSession } from 'next-auth/react';
 
 const Auth = () => {
-  const router = useRouter();
+  const session = useSession();
   const errorMessage = '';
 
-  const { mutate, isLoading, error } = useMutation(
+  const { mutate } = useMutation(
     ({ email, password }: { email: string; password: string }) => {
-      return api.auth.getAuth({ email, password });
+      return signIn('credentials', {
+        email,
+        password,
+        callbackUrl: '/quizzlist',
+      });
     },
     {
-      onSuccess: (data) => {
-        localStorage.setItem('token', data.access_token);
-        router.push('/quizzlist');
+      onSuccess: () => {
+        console.log('Sign in successful');
       },
       onError: (error) => {
         console.error(error);
       },
     }
   );
+
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   const handleSignIn = (email: string, password: string) => {
     if (!validateEmail(email)) {

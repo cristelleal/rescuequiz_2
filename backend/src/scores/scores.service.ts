@@ -27,10 +27,10 @@ export class ScoresService {
     return Math.round(totalScore / scores.length);
   }
 
-  async createScore(value: number): Promise<ScoreEntity> {
-    const score = new ScoreEntity();
-    score.value = value;
-    await this.em.persistAndFlush(score);
-    return score;
+  async createScore(totalScore: number): Promise<ScoreEntity> {
+    const newScore = new ScoreEntity();
+    newScore.totalScore = totalScore;
+    await this.em.persistAndFlush(newScore);
+    return newScore;
   }
 }

@@ -6,13 +6,15 @@ export default class ScoreEntity {
   @PrimaryKey()
   id!: number;
 
-  @Property()
-  scoreCount!: number;
+  @Property({ default: 0 })
+  scoreCount = 0;
+
+  @Property({ default: 0 })
+  totalScore = 0;
 
   @Property()
-  totalScore!: number;
+  value: number;
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;
-  value: number;
 }

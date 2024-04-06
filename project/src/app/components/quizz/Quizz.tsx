@@ -7,9 +7,13 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './quizz.css';
 import Navigation from '../navigation/Navigation';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import api from '@/client';
 import { quizzType } from '../../types';
+
+const sendScore = async (totalScore: number): Promise<void> => {
+  return api.scores.createScore({ totalScore });
+};
 
 function Quizz({ quizzData, title }: quizzType) {
   let [index, setIndex] = useState(0);
@@ -25,14 +29,14 @@ function Quizz({ quizzData, title }: quizzType) {
 
   const optionArray = [option1, option2, option3];
 
-  const getScoresData = async () => {
-    api.scores.getScoresCount();
-  };
-
-  const { data, error } = useQuery('scores', getScoresData);
-  if (error) {
-    console.log('Error:', error);
-  }
+  const mutation = useMutation(sendScore, {
+    onSuccess: (data) => {
+      console.log('Score created :', data);
+    },
+    onError: (error) => {
+      console.error('Score not created :', error);
+    },
+  });
 
   const checkAnswer = (element: any, answer: number) => {
     if (lock === false) {
@@ -54,8 +58,9 @@ function Quizz({ quizzData, title }: quizzType) {
       if (index === quizzData.length - 1) {
         setResult(true);
         try {
+          mutation.mutate(score);
         } catch (error: any) {
-          throw new Error('Error updating quizzCount:', error);
+            throw new Error('Error updating score:', error);
         }
         return 0;
       }
@@ -86,114 +91,114 @@ function Quizz({ quizzData, title }: quizzType) {
 
   return (
     <div className='min-h-screen flex flex-col justify-start'>
-        <Navigation />
-        <div className='p-2'></div>
-        <main className='main-section'>
-          <div className='container'>
-            <div className='title'>
-              <h1>{title}</h1>
-              <div className='loader'></div>
-            </div>
-            {result ? (
-              <></>
-            ) : (
-              <>
-                <h2>
-                  {index + 1}. {question.question}
-                </h2>
-                <ul>
-                  <li
-                    ref={option1}
-                    onClick={(element) => {
-                      checkAnswer(element, 1);
-                    }}
-                  >
-                    {question.option1}
-                  </li>
-                  <li
-                    ref={option2}
-                    onClick={(element) => {
-                      checkAnswer(element, 2);
-                    }}
-                  >
-                    {question.option2}
-                  </li>
-                  <li
-                    ref={option3}
-                    onClick={(element) => {
-                      checkAnswer(element, 3);
-                    }}
-                  >
-                    {question.option3}
-                  </li>
-                </ul>
-                <div className='flex justify-center'>
-                  <Button buttonText='Suivant' handleClick={next} />
-                </div>
-                {showAdvice && (
-                  <div className='bg-red-50 p-4 rounded text-gray-700 text-sm'>
-                    <p>💡 {question.advice}</p>
-                  </div>
-                )}
-                <div className='index'>
-                  {index + 1} sur {quizzData.length} questions
-                </div>
-              </>
-            )}
-            {result ? (
-              <>
-                <div className='percentage-box'>
-                  <div className='percentage'>
-                    <CircularProgressbar
-                      styles={buildStyles({
-                        textColor: '#EF4444',
-                        pathColor: `#EF4444`,
-                      })}
-                      value={percentage}
-                      text={`${percentage}%`}
-                    />
-                  </div>
-                </div>
-                {isScoreAboveHalf ? (
-                  <div className='result-container'>
-                    <p className='score-infos'>
-                      Félicitations ! Vous avez obtenu un score supérieur à la
-                      moyenne, continuez comme ça !
-                    </p>
-                  </div>
-                ) : (
-                  <div className='result-container'>
-                    <p className='score-infos'>
-                      Vous avez obtenu un score inférieur ou égal à la moyenne.
-                      <br />
-                      <a
-                        className='link'
-                        href='https://www.croix-rouge.fr/les-gestes-de-premiers-secours'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                      >
-                        🔗 Se renseigner sur les gestes de premiers secours
-                      </a>
-                    </p>
-                  </div>
-                )}
-                <div className='flex justify-center'>
-                  <Button buttonText='Recommencer' handleClick={reset} />
-                </div>
-                <Link href='/userAccount'>
-                  <p className='text-sm text-gray-500 text-center sm:mt-4'>
-                    <span className='text-gray-700 underline'>
-                      Espace personnel
-                    </span>
-                  </p>
-                </Link>
-              </>
-            ) : (
-              <></>
-            )}
+      <Navigation />
+      <div className='p-2'></div>
+      <main className='main-section'>
+        <div className='container'>
+          <div className='title'>
+            <h1>{title}</h1>
+            <div className='loader'></div>
           </div>
-        </main>
-        <FooterElement />
+          {result ? (
+            <></>
+          ) : (
+            <>
+              <h2>
+                {index + 1}. {question.question}
+              </h2>
+              <ul>
+                <li
+                  ref={option1}
+                  onClick={(element) => {
+                    checkAnswer(element, 1);
+                  }}
+                >
+                  {question.option1}
+                </li>
+                <li
+                  ref={option2}
+                  onClick={(element) => {
+                    checkAnswer(element, 2);
+                  }}
+                >
+                  {question.option2}
+                </li>
+                <li
+                  ref={option3}
+                  onClick={(element) => {
+                    checkAnswer(element, 3);
+                  }}
+                >
+                  {question.option3}
+                </li>
+              </ul>
+              <div className='flex justify-center'>
+                <Button buttonText='Suivant' handleClick={next} />
+              </div>
+              {showAdvice && (
+                <div className='bg-red-50 p-4 rounded text-gray-700 text-sm'>
+                  <p>💡 {question.advice}</p>
+                </div>
+              )}
+              <div className='index'>
+                {index + 1} sur {quizzData.length} questions
+              </div>
+            </>
+          )}
+          {result ? (
+            <>
+              <div className='percentage-box'>
+                <div className='percentage'>
+                  <CircularProgressbar
+                    styles={buildStyles({
+                      textColor: '#EF4444',
+                      pathColor: `#EF4444`,
+                    })}
+                    value={percentage}
+                    text={`${percentage}%`}
+                  />
+                </div>
+              </div>
+              {isScoreAboveHalf ? (
+                <div className='result-container'>
+                  <p className='score-infos'>
+                    Félicitations ! Vous avez obtenu un score supérieur à la
+                    moyenne, continuez comme ça !
+                  </p>
+                </div>
+              ) : (
+                <div className='result-container'>
+                  <p className='score-infos'>
+                    Vous avez obtenu un score inférieur ou égal à la moyenne.
+                    <br />
+                    <a
+                      className='link'
+                      href='https://www.croix-rouge.fr/les-gestes-de-premiers-secours'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                    >
+                      🔗 Se renseigner sur les gestes de premiers secours
+                    </a>
+                  </p>
+                </div>
+              )}
+              <div className='flex justify-center'>
+                <Button buttonText='Recommencer' handleClick={reset} />
+              </div>
+              <Link href='/userAccount'>
+                <p className='text-sm text-gray-500 text-center sm:mt-4'>
+                  <span className='text-gray-700 underline'>
+                    Espace personnel
+                  </span>
+                </p>
+              </Link>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+      </main>
+      <FooterElement />
     </div>
   );
 }

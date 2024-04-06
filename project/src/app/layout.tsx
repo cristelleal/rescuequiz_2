@@ -1,5 +1,6 @@
 import './globals.css';
-import ReactQueryProvider from '../reactQueryProvider';
+import ReactQueryProvider from '../ReactQueryProvider';
+import AuthProvider from './context/AuthProvider';
 
 export default function RootLayout({
   children,
@@ -7,9 +8,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ffr'>
+    <html lang='fr'>
       <body>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <AuthProvider>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

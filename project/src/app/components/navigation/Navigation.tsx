@@ -1,16 +1,14 @@
 "use client"
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useQueryClient } from 'react-query';
+import { signOut } from 'next-auth/react';
 
 function Navigation() {
   const router = useRouter();
-  const queryClient = useQueryClient();
 
   const handleSignOut = async () => {
     try {
-      queryClient.clear();
-      router.push('/');
+      signOut({ redirect: true, callbackUrl: '/'});
     } catch (error: any) {
       throw new Error('Logout error:', error);
     }

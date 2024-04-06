@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import UserEntity from './User.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { SignUpDto } from './SignUp.dto';
+import { SignUpDto } from './dto/SignUp.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 import { ApiOperation } from '@nestjs/swagger';
 
@@ -13,7 +13,6 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ operationId: 'getUsers' })
-  @UseGuards(LocalAuthGuard)
   async getUsers(): Promise<UserEntity[]> {
     return this.usersService.findAll();
   }

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '../components/navigation/Navigation';
 import FooterElement from '../components/footerElement/FooterElement';
 import Link from 'next/link';
@@ -7,13 +7,42 @@ import Button from '../components/button/Button';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { formatQuizCount } from '../utils/utils';
 import './userAccount.css';
+import api from '@/client';
+import { useQuery } from 'react-query';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
-const ClientComponentUserAccount = () => {
+const UserAccount = () => {
   const [name, setName] = useState('');
   const [quizzCount, setQuizzCount] = useState(0);
   const [averageScore, setAverageScore] = useState(0);
 
-  // Get score et quizCount from API
+  const router = useRouter();
+  const session = useSession();
+  console.log(session);
+
+  useEffect(() => {
+    if (session.data === null && session.status === 'unauthenticated') {
+      router.push('/auth');
+    }
+  }),
+    [router, session];
+
+  const fetchScoresData = async () => {
+    return api.scores.getScoresCount();
+  };
+
+  const fetchTotalScoreData = async () => {
+    return api.scores.getTotalScores();
+  };
+
+  const { data: scoresData } = useQuery('scores', fetchScoresData);
+  const { data: totalScoreData } = useQuery('totalScore', fetchTotalScoreData);
+
+  if (scoresData && totalScoreData) {
+    setQuizzCount(scoresData);
+    setAverageScore(Math.round(totalScoreData / scoresData));
+  }
 
   return (
     <div className='min-h-screen flex flex-col justify-start'>
@@ -59,7 +88,7 @@ const ClientComponentUserAccount = () => {
                 </dd>
               </div>
             </dl>
-          </div>{' '}
+          </div>
         </div>
       </section>
       <FooterElement />
@@ -67,4 +96,4 @@ const ClientComponentUserAccount = () => {
   );
 };
 
-export default ClientComponentUserAccount;
+export default UserAccount;
