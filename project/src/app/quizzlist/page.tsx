@@ -11,6 +11,7 @@ function QuizzList(): JSX.Element {
   const session = useSession();
   console.log(session);
 
+
   useEffect(() => {
     if (session.data === null && session.status === 'unauthenticated') {
       router.push('/auth');

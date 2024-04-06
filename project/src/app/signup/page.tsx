@@ -1,26 +1,42 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { validateName, validateEmail, validatePassword } from '../utils/utils';
 import Form from '../components/form/Form';
 import Input from '../components/input/Input';
-import { useRouter } from 'next/navigation';
 import api from '@/client';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
   const [name, setName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const session = useSession();
   const router = useRouter();
 
-  const { mutate, isLoading, error } = useMutation(
-    async ({ name, email, password }: { name: string; email: string; password: string }) => {
-      return api.users.createUser({ name, email, password });
+  const { mutate, error } = useMutation(
+    async ({
+      name,
+      email,
+      password,
+    }: {
+      name: string;
+      email: string;
+      password: string;
+    }) => {
+      await api.users.createUser({ name, email, password });
+      return { email, password };
     },
     {
-      onSuccess: (data) => {
+      onSuccess: (data: { email: string; password: string }) => {
+        signIn('credentials', {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+        });
         router.push('/quizzlist');
       },
       onError: (error) => {
@@ -28,6 +44,10 @@ const SignUp = () => {
       },
     }
   );
+
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -43,7 +63,9 @@ const SignUp = () => {
       return;
     }
     if (!validatePassword(password)) {
-      setErrorMessage('Le mot de passe est invalide : Il doit contenir entre 6 et 20 caractères');
+      setErrorMessage(
+        'Le mot de passe est invalide : Il doit contenir entre 6 et 20 caractères'
+      );
       return;
     }
     mutate({ email, password, name });

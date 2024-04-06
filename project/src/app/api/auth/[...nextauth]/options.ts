@@ -33,15 +33,15 @@ export const options: NextAuthOptions = {
         const { access_token: token } = await api.auth.getAuth(credentials);
 
         return {
-          id: '173625',
+          id: 'id',
           token,
         };
       },
     }),
   ],
   pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
+    signIn: '/auth',
+    signOut: '/',
   },
   callbacks: {
     async jwt({ token, user }) {
