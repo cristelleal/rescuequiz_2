@@ -18,7 +18,7 @@ export function formatQuizCount(quizCount: number): string {
   if (quizCount === 0) {
     return 'Aucun quiz réalisé';
   } else if (quizCount === 1) {
-    return '1 quiz réalisé';
+    return 'quiz réalisé';
   } else {
     return `quiz réalisés`;
   }
